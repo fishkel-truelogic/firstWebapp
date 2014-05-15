@@ -1,15 +1,9 @@
 require 'sinatra'
 require 'mustache'
 
-load '../classes/Persona.rb'
+Dir["../classes/*.rb"].each {|file| require file }
 
 get '/personas' do
-	
-	template = ""
-	file = File.new("../templates/personas.html", "r")
-	while (line = file.gets) do
-		template += line
-	end
 	
 	personas = []
 	personas.push Persona.new("Leonel Dan Fishkel", 21)
@@ -18,9 +12,9 @@ get '/personas' do
 	personas.push Persona.new("Alberto Rodolfo fishkel", 66)
 	personas.push Persona.new("Cinthia Yael Fishkel", 24)
 
+	template = Template.new("personas.html")
 	data = {:personas => personas}
-	Mustache.render(template, data)
-
 	
+	Mustache.render(template.tmp, data)
 
 end
